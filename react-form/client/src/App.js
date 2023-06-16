@@ -53,8 +53,7 @@ const MyComponent = () => {
       <button className="btn btn-primary" onClick={() => setLogs([])}>clear logs</button>
       {logs.map((log, index) => (
         <div key={index}>
-          <p>{log.type}</p>
-          <p>{log.address}</p>
+          <p>{log.type}, {log.address}</p>
         </div>
       ))}
     </div>

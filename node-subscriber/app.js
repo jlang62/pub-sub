@@ -42,16 +42,18 @@ app.get('/dapr/subscribe', (_req, res) => {
   });
   
   app.post('/asap', (req, res) => {
-    console.log('Received ASAP delivery request:');
     logs.push({type: 'asap', address: req.body.data.message});
+    console.log('Received ASAP delivery request:');
     console.log('Address:', req.body.data.message);
+    console.log('Order:', req.body.data.order);
     res.sendStatus(200);
   });
   
   app.post('/hurry', (req, res) => {
-    console.log('Received Hurry delivery request:');
     logs.push({type: 'hurry', address: req.body.data.message});
+    console.log('Received Hurry delivery request:');
     console.log('Address:', req.body.data.message);
+    console.log('Order:', req.body.data.order);
     res.sendStatus(200);
   });
 

@@ -47,7 +47,8 @@ export class MessageForm extends React.Component {
     getInitialState = () => {
       return {
         messageType: "asap",
-        message: ""
+        message: "",
+        order: "",
       };
     }
 
@@ -67,6 +68,10 @@ export class MessageForm extends React.Component {
           <div className="form-group">
             <label>Enter address</label>
             <textarea className="form-control" id="exampleFormControlTextarea1" rows="3" name="message" onChange={this.handleInputChange} value={this.state.message} placeholder="Enter address here"></textarea>
+          </div>
+          <div className="form-group">
+            <label>Enter food order</label>
+            <textarea className="form-control" id="exampleFormControlTextarea2" rows="1" name="order" onChange={this.handleInputChange} value={this.state.order} placeholder="Enter order here"></textarea>
           </div>
           <button type="submit" className="btn btn-primary">Submit</button>
         </form>
