@@ -19,6 +19,12 @@ const app = express();
 app.use(bodyParser.json({ type: 'application/*+json' }));
 
 const port = 3000;
+const logs = [];
+
+app.get('/api/logs', (_req, res) => {
+  res.json({ logs });
+});
+
 
 app.get('/dapr/subscribe', (_req, res) => {
     res.json([
@@ -37,12 +43,14 @@ app.get('/dapr/subscribe', (_req, res) => {
   
   app.post('/asap', (req, res) => {
     console.log('Received ASAP delivery request:');
+    logs.push({type: 'asap', address: req.body.data.message});
     console.log('Address:', req.body.data.message);
     res.sendStatus(200);
   });
   
   app.post('/hurry', (req, res) => {
     console.log('Received Hurry delivery request:');
+    logs.push({type: 'hurry', address: req.body.data.message});
     console.log('Address:', req.body.data.message);
     res.sendStatus(200);
   });

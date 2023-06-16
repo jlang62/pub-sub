@@ -9,7 +9,6 @@ export function Nav(){
     return(
     <nav class="navbar navbar-dark bg-dark">
       <a class="navbar-brand" href="/">Pub-Sub Sample</a>
-      <a class="navbar-item" href="/delivery">Delivery</a>
     </nav>
     )
 }

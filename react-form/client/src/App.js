@@ -3,23 +3,25 @@
 // Licensed under the MIT License.
 // ------------------------------------------------------------
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { MessageForm } from './MessageForm';
-import { Delivery } from './Delivery';
 import { Nav } from './Nav';
 
 import './App.css';
 
 
-function App() {
-  const url =  window.location.pathname.substr(1);
+export default function App() {
+  const [delivery, setDelivery] = useState(false);
+
   return (
     <div className="App">
       <Nav />
+      <button className="btn btn-primary" onClick={() => setDelivery(!delivery)}>change view</button>
       <div className="container-fluid">
         <div className="row">
           <div className="col-12 d-flex flex-column align-items-center justify-content-center">
-          {url === "delivery" ? <Delivery /> : <MessageForm />}
+          
+            {delivery ? <MyComponent /> : <MessageForm />}
           </div>
         </div>
       </div>
@@ -27,4 +29,35 @@ function App() {
   );
 }
 
-export default App;
+const MyComponent = () => {
+  const [logs, setLogs] = useState([]);
+
+  useEffect(() => {
+    const fetchLogs = async () => {
+      try {
+        const response = await fetch('/api/logs');
+        const logData = await response.json();
+        setLogs(logData.logs);
+      } catch (error) {
+        console.error('Error fetching logs:', error);
+      }
+    };
+
+    fetchLogs();
+  }, []);
+
+
+  return (
+    <div>
+      <h1>MyComponent</h1>
+      <button className="btn btn-primary" onClick={() => setLogs([])}>clear logs</button>
+      {logs.map((log, index) => (
+        <div key={index}>
+          <p>{log.type}</p>
+          <p>{log.address}</p>
+        </div>
+      ))}
+    </div>
+  )
+}
+
