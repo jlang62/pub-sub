@@ -35,7 +35,7 @@ const MyComponent = () => {
   useEffect(() => {
     const fetchLogs = async () => {
       try {
-        const response = await fetch('/api/logs');
+        const response = await fetch('http://localhost:3000/api/logs');
         const logData = await response.json();
         setLogs(logData.logs);
       } catch (error) {
@@ -60,4 +60,3 @@ const MyComponent = () => {
     </div>
   )
 }
-
