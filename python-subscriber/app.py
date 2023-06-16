@@ -22,12 +22,12 @@ CORS(app)
 
 @app.route('/dapr/subscribe', methods=['GET'])
 def subscribe():
-    subscriptions = [{'pubsubname': 'pubsub', 'topic': 'A', 'route': 'A'}, {'pubsubname': 'pubsub', 'topic': 'C', 'route': 'C'}]
+    subscriptions = [{'pubsubname': 'pubsub', 'topic': 'asap', 'route': 'asap'}, {'pubsubname': 'pubsub', 'topic': 'C', 'route': 'C'}]
     return jsonify(subscriptions)
 
-@app.route('/A', methods=['POST'])
+@app.route('/asap', methods=['POST'])
 def a_subscriber():
-    print(f'A: {request.json}', flush=True)
+    print(f'asap: {request.json}', flush=True)
     print('Received message I changed this "{}" on topic "{}"'.format(request.json['data']['message'], request.json['topic']), flush=True)
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
 

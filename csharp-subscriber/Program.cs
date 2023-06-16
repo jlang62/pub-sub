@@ -9,12 +9,12 @@ app.UseCloudEvents();
 
 app.MapSubscribeHandler();
 
-app.MapPost("/A", [Topic("pubsub", "A")] (ILogger<Program> logger, MessageEvent item) => {
+app.MapPost("/asap", [Topic("pubsub", "asap")] (ILogger<Program> logger, MessageEvent item) => {
     Console.WriteLine($"{item.MessageType}: {item.Message}");
     return Results.Ok();
 });
 
-app.MapPost("/B", [Topic("pubsub", "B")] (ILogger<Program> logger, MessageEvent item) => {
+app.MapPost("/hurry", [Topic("pubsub", "hurry")] (ILogger<Program> logger, MessageEvent item) => {
     Console.WriteLine($"{item.MessageType}: {item.Message}");
     return Results.Ok();
 });
