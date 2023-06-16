@@ -20,19 +20,26 @@ import sys
 app = flask.Flask(__name__)
 CORS(app)
 
+
 @app.route('/dapr/subscribe', methods=['GET'])
 def subscribe():
-    subscriptions = [{'pubsubname': 'pubsub', 'topic': 'asap', 'route': 'asap'}, {'pubsubname': 'pubsub', 'topic': 'C', 'route': 'C'}]
+    subscriptions = [{'pubsubname': 'pubsub', 'topic': 'asap', 'route': 'asap'}, {'pubsubname': 'pubsub', 'topic': 'hurry', 'route': 'hurry'}, {'pubsubname': 'pubsub', 'topic': 'mins', 'route': 'mins'}]
     return jsonify(subscriptions)
 
 @app.route('/asap', methods=['POST'])
-def a_subscriber():
+def asap_subscriber():
     print(f'asap: {request.json}', flush=True)
     print('Received message I changed this "{}" on topic "{}"'.format(request.json['data']['message'], request.json['topic']), flush=True)
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
 
-@app.route('/C', methods=['POST'])
-def c_subscriber():
+@app.route('/hurry', methods=['POST'])
+def hurry_subscriber():
+    print(f'C: {request.json}', flush=True)
+    print('Received message I changed this "{}" on topic "{}"'.format(request.json['data']['message'], request.json['topic']), flush=True)
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+
+@app.route('/mins', methods=['POST'])
+def mins_subscriber():
     print(f'C: {request.json}', flush=True)
     print('Received message I changed this "{}" on topic "{}"'.format(request.json['data']['message'], request.json['topic']), flush=True)
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
