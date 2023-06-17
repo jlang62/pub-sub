@@ -5,6 +5,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { MessageForm } from './MessageForm';
+import { Cook } from './Cook';
 import { Nav } from './Nav';
 
 import './App.css';
@@ -65,14 +66,6 @@ const Delivery = () => {
           <p>{log.type}, {log.address}</p>
         </div>
       ))}
-    </div>
-  )
-}
-
-const Cook = () => {
-  return (
-    <div>
-      <h1>Cook</h1>
     </div>
   )
 }

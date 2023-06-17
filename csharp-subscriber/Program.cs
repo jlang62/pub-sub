@@ -9,7 +9,12 @@ app.UseCloudEvents();
 
 app.MapSubscribeHandler();
 
-app.MapPost("/asap", [Topic("pubsub", "asap")] (ILogger<Program> logger, MessageEvent item) => {
+app.MapPost("/ready", [Topic("pubsub", "ready")] (ILogger<Program> logger, MessageEvent item) => {
+    Console.WriteLine($"{item.MessageType}: {item.Message}");
+    return Results.Ok();
+});
+
+app.MapPost("/outofstock", [Topic("pubsub", "outofstock")] (ILogger<Program> logger, MessageEvent item) => {
     Console.WriteLine($"{item.MessageType}: {item.Message}");
     return Results.Ok();
 });
@@ -19,7 +24,7 @@ app.MapPost("/hurry", [Topic("pubsub", "hurry")] (ILogger<Program> logger, Messa
     return Results.Ok();
 });
 
-app.MapPost("/C", [Topic("pubsub", "C")] (ILogger<Program> logger, Dictionary<string, string> item) => {
+app.MapPost("/hour", [Topic("pubsub", "hour")] (ILogger<Program> logger, Dictionary<string, string> item) => {
     Console.WriteLine($"{item["messageType"]}: {item["message"]}");
     return Results.Ok();
 });

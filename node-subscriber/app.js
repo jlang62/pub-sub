@@ -38,6 +38,16 @@ app.get('/dapr/subscribe', (_req, res) => {
         topic: 'hurry',
         route: 'hurry',
       },
+      {
+        pubsubname: 'pubsub',
+        topic: 'hour',
+        route: 'hour',
+      },
+      {
+        pubsubname: 'pubsub',
+        topic: 'ready',
+        route: 'ready',
+      },
     ]);
   });
   
@@ -54,6 +64,20 @@ app.get('/dapr/subscribe', (_req, res) => {
     console.log('Received Hurry delivery request:');
     console.log('Address:', req.body.data.message);
     console.log('Order:', req.body.data.order);
+    res.sendStatus(200);
+  });
+
+  app.post('/hour', (req, res) => {
+    logs.push({type: 'hour', address: req.body.data.message});
+    console.log('Received in 1 Hour delivery request:');
+    console.log('Address:', req.body.data.message);
+    console.log('Order:', req.body.data.order);
+    res.sendStatus(200);
+  });
+
+  app.post('/ready', (req, res) => {
+    console.log('Received status:');
+    console.log('Status:', req.body.data.messageType);
     res.sendStatus(200);
   });
 

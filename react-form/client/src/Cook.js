@@ -13,7 +13,7 @@
 
 import React from 'react';
 
-export class MessageForm extends React.Component {
+export class Cook extends React.Component {
     constructor(props) {
       super(props);
 
@@ -46,32 +46,21 @@ export class MessageForm extends React.Component {
 
     getInitialState = () => {
       return {
-        messageType: "asap",
-        message: "",
-        order: "",
+        messageType: "ready",
       };
     }
 
     render() {
       return (
         <div class="col-12 bd-content w-50">
-          <h1>Food Food Food</h1>
+          <h1>Cook</h1>
           <form onSubmit={this.handleSubmit}>
           <div className="form-group">
-            <label>Select delivery time</label>
+            <label>Select status</label>
             <select className="custom-select custom-select-lg mb-3" name="messageType" onChange={this.handleInputChange} value={this.state.messageType}>
-              <option value="asap">asap</option>
-              <option value="hurry">hurry</option>
-              <option value="hour">in 1 hour</option>
+              <option value="ready">ready</option>
+              <option value="outofstock">out of stock</option>
             </select>
-          </div>
-          <div className="form-group">
-            <label>Enter address</label>
-            <textarea className="form-control" id="exampleFormControlTextarea1" rows="3" name="message" onChange={this.handleInputChange} value={this.state.message} placeholder="Enter address here"></textarea>
-          </div>
-          <div className="form-group">
-            <label>Enter food order</label>
-            <textarea className="form-control" id="exampleFormControlTextarea2" rows="1" name="order" onChange={this.handleInputChange} value={this.state.order} placeholder="Enter order here"></textarea>
           </div>
           <button type="submit" className="btn btn-primary">Submit</button>
         </form>
