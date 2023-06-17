@@ -11,7 +11,7 @@
 // limitations under the License.
 //
 
-import React from 'react';
+import React, { useEffect, useState }  from 'react';
 
 export class Cook extends React.Component {
     constructor(props) {
@@ -54,24 +54,98 @@ export class Cook extends React.Component {
       return (
         <div className="col-12 bd-content w-50">
           <h1>Cook</h1>
-          <div className="d-flex justify-content-center align-items-center">
-            <div className="col-6">
-              <h2>Food</h2>
-            </div>
-            <div className="col-6 d-flex justify-content-between">
-              <form onSubmit={this.handleSubmit}>
-              <div className="form-group">
-                <label>Select status</label>
-                <select className="custom-select custom-select-lg mb-3" name="messageType" onChange={this.handleInputChange} value={this.state.messageType}>
-                  <option value="ready">ready</option>
-                  <option value="outofstock">out of stock</option>
-                </select>
-              </div>
-              <button type="submit" className="btn btn-primary">Submit</button>
-              </form>
-            </div>
-          </div>
+          <Orders />
       </div>
+      );
+    }
+  }
+
+  const Orders = () => {
+    const [orders, setOrders] = useState([]);
+  
+    useEffect(() => {
+      const fetchOrders = async () => {
+        try {
+          const response = await fetch('http://localhost:3000/api/orders');
+          const orderData = await response.json();
+          setOrders(orderData.orders);
+        } catch (error) {
+          console.error('Error fetching orders:', error);
+        }
+      };
+  
+      fetchOrders();
+    }, []);
+  
+  
+    return (
+      <div>
+        <button className="btn btn-primary" onClick={() => setOrders([])}>clear logs</button>
+        <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">Date/Time</th>
+              <th scope="col">Type</th>
+              <th scope="col">Order</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders.map((order, index) => (
+              <tr key={index}>
+                <td>{order.date}</td>
+                <td>{order.type}</td>
+                <td>{order.order}</td>
+                <Status order={order}/>
+              </tr>
+            ))}
+            </tbody>
+        </table>
+      </div>
+    )
+  }
+
+  export class Status extends React.Component {
+    constructor(props) {
+      super(props);
+
+      this.state = this.getInitialState();
+    }
+  
+    handleInputChange = (event) => {
+      const target = event.target;
+      const value = target.value;
+      const name = target.name;
+  
+      console.log(`Setting ${name} to ${value}`)
+      this.setState({
+        [name]: value
+      });
+    }
+
+    handleSubmit = (event) => {
+        fetch('/publish', {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method:"POST",
+            body: JSON.stringify(this.state),
+        });
+        event.preventDefault();
+        this.setState(this.getInitialState());
+    }
+
+    getInitialState = () => {
+      return {
+        messageType: "ready",
+        message: `ready for ${this.props.order.order}`
+      };
+    }
+
+    render() {
+      return (
+        <button className="btn btn-primary" onClick={() => this.handleSubmit()}>Ready</button>
       );
     }
   }

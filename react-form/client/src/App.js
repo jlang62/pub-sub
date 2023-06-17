@@ -45,9 +45,9 @@ const Delivery = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/orders');
+        const response = await fetch('http://localhost:5009/pickup');
         const orderData = await response.json();
-        setOrders(orderData.orders);
+        setOrders(orderData);
       } catch (error) {
         console.error('Error fetching orders:', error);
       }
@@ -56,16 +56,43 @@ const Delivery = () => {
     fetchOrders();
   }, []);
 
+  const handleDelivered = async (orderId) => {
+    try {
+      await fetch(`http://localhost:5009/pickup/${orderId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      setOrders(prevOrders => prevOrders.filter(order => order.id !== orderId));
+    } catch (error) {
+      console.error('Error deleting order:', error);
+    }
+  };
 
   return (
-    <div>
+    <div className='w-100'>
       <h1>Delivery</h1>
-      <button className="btn btn-primary" onClick={() => setOrders([])}>clear logs</button>
-      {orders.map((order, index) => (
-        <div key={index}>
-          <p>{order.type}, {order.address}</p>
+      <div className="row h-100">
+        <div className='col-6'>
+          <h2>Incoming orders:</h2>
+          <p>Test</p>
         </div>
-      ))}
+        <div className='col-6'>
+          <h2>Ready for pick up</h2>
+          {orders.map((order, index) => (
+            <div key={index} className='d-flex justify-content-between pt-2'>
+              <p>{order.orderItem}</p>
+              <button className="btn btn-primary" onClick={() => handleDelivered(order.id)}>delivered</button>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="row">
+        <div className='col-12'>
+          <h2>Delivered:</h2>
+        </div>
+      </div>
     </div>
   )
 }

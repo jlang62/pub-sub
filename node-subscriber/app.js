@@ -52,7 +52,7 @@ app.get('/dapr/subscribe', (_req, res) => {
   });
   
   app.post('/asap', (req, res) => {
-    orders.push({date: req.body.data.date, type: req.body.data.messageType, address: req.body.data.message});
+    orders.push({date: req.body.data.date, type: req.body.data.messageType, address: req.body.data.message, order: req.body.data.order});
     console.log('Received ASAP delivery request:');
     console.log('Address:', req.body.data.message);
     console.log('Order:', req.body.data.order);
@@ -61,7 +61,7 @@ app.get('/dapr/subscribe', (_req, res) => {
   });
   
   app.post('/hurry', (req, res) => {
-    orders.push({date: req.body.data.date, type: req.body.data.messageType, address: req.body.data.message});
+    orders.push({date: req.body.data.date, type: req.body.data.messageType, address: req.body.data.message, order: req.body.data.order});
     console.log('Received Hurry delivery request:');
     console.log('Address:', req.body.data.message);
     console.log('Order:', req.body.data.order);
@@ -70,7 +70,7 @@ app.get('/dapr/subscribe', (_req, res) => {
   });
 
   app.post('/hour', (req, res) => {
-    orders.push({date: req.body.data.date, type: req.body.data.messageType, address: req.body.data.message});
+    orders.push({date: req.body.data.date, type: req.body.data.messageType, address: req.body.data.message, order: req.body.data.order});
     console.log('Received in 1 Hour delivery request:');
     console.log('Address:', req.body.data.message);
     console.log('Order:', req.body.data.order);

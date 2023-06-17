@@ -9,13 +9,27 @@ app.UseCloudEvents();
 
 app.MapSubscribeHandler();
 
+List<Order> orders = new();
+
+
+app.MapGet("/pickup", () => {
+    return Results.Ok(orders);
+});
+
 app.MapPost("/ready", [Topic("pubsub", "ready")] (ILogger<Program> logger, MessageEvent item) => {
+    orders.Add(new Order { Id = orders.Count + 1, OrderItem = item.Message });
     Console.WriteLine($"{item.MessageType}: {item.Message}");
     return Results.Ok();
 });
 
-app.MapPost("/outofstock", [Topic("pubsub", "outofstock")] (ILogger<Program> logger, MessageEvent item) => {
-    Console.WriteLine($"{item.MessageType}: {item.Message}");
+app.MapPost("/pickup/{id}", (int id) => {
+    var order = orders.FirstOrDefault(o => o.Id == id);
+    if (order is null)
+    {
+        return Results.NotFound();
+    }
+
+    orders.Remove(order);
     return Results.Ok();
 });
 
@@ -32,3 +46,10 @@ app.MapPost("/outofstock", [Topic("pubsub", "outofstock")] (ILogger<Program> log
 app.Run();
 
 internal record MessageEvent(string MessageType, string Message);
+
+public class Order
+{
+    public int Id { get; set; }
+
+    public string OrderItem { get; set; } = null!;
+}
