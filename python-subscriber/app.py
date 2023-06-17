@@ -20,6 +20,29 @@ import sys
 app = flask.Flask(__name__)
 CORS(app)
 
+# für email:
+import smtplib
+from email.mime.text import MIMEText
+
+# SMTP-Konfiguration für den E-Mail-Versand
+SMTP_HOST = 'smtp-mail.outlook.com'
+SMTP_PORT = 587
+SMTP_USERNAME = 'uebungdapr@hotmail.com'
+SMTP_PASSWORD = 'Daprdapr1234'
+SENDER_EMAIL = 'sender@example.com'
+RECIPIENT_EMAIL = 'f.johanna@gmx.at'
+
+def sendEmail(subject, message):
+    msg = MIMEText(message)
+    msg['Subject'] = subject
+    msg['From'] = SENDER_EMAIL
+    msg['To'] = RECIPIENT_EMAIL
+
+    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+        server.starttls()
+        server.login(SMTP_USERNAME, SMTP_PASSWORD)
+        server.send_message(msg)
+
 
 @app.route('/dapr/subscribe', methods=['GET'])
 def subscribe():
@@ -29,6 +52,11 @@ def subscribe():
 @app.route('/asap', methods=['POST'])
 def asap_subscriber():
     print(f'asap: {request.json}', flush=True)
+    # E-Mail message:
+    message = request.json['data']['message']
+    topic = "Please pick up ____ at Mario's Pizza place" + request.json['topic']
+    sendEmail('Delivery needs to be picked up', f'Received message: "{message}" on topic: "{topic}"')
+    
     print('Received message I changed this "{}" on topic "{}"'.format(request.json['data']['message'], request.json['topic']), flush=True)
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
 
@@ -45,3 +73,5 @@ def mins_subscriber():
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
 
 app.run(port=5001)
+
+
