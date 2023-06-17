@@ -49,13 +49,17 @@ export class MessageForm extends React.Component {
         messageType: "asap",
         message: "",
         order: "",
+        date: new Date().toLocaleString()
       };
     }
 
+    
+
     render() {
       return (
-        <div class="col-12 bd-content w-50">
+        <div className="col-12 bd-content w-50">
           <h1>Food Food Food</h1>
+          <h3>{this.state.date}</h3>
           <form onSubmit={this.handleSubmit}>
           <div className="form-group">
             <label>Select delivery time</label>

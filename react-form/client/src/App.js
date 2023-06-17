@@ -40,30 +40,30 @@ export default function App() {
 }
 
 const Delivery = () => {
-  const [logs, setLogs] = useState([]);
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    const fetchLogs = async () => {
+    const fetchOrders = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/logs');
-        const logData = await response.json();
-        setLogs(logData.logs);
+        const response = await fetch('http://localhost:3000/api/orders');
+        const orderData = await response.json();
+        setOrders(orderData.orders);
       } catch (error) {
-        console.error('Error fetching logs:', error);
+        console.error('Error fetching orders:', error);
       }
     };
 
-    fetchLogs();
+    fetchOrders();
   }, []);
 
 
   return (
     <div>
       <h1>Delivery</h1>
-      <button className="btn btn-primary" onClick={() => setLogs([])}>clear logs</button>
-      {logs.map((log, index) => (
+      <button className="btn btn-primary" onClick={() => setOrders([])}>clear logs</button>
+      {orders.map((order, index) => (
         <div key={index}>
-          <p>{log.type}, {log.address}</p>
+          <p>{order.type}, {order.address}</p>
         </div>
       ))}
     </div>

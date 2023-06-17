@@ -19,10 +19,10 @@ const app = express();
 app.use(bodyParser.json({ type: 'application/*+json' }));
 
 const port = 3000;
-const logs = [];
+const orders = [];
 
-app.get('/api/logs', (_req, res) => {
-  res.json({ logs });
+app.get('/api/orders', (_req, res) => {
+  res.json({ orders });
 });
 
 
@@ -52,23 +52,25 @@ app.get('/dapr/subscribe', (_req, res) => {
   });
   
   app.post('/asap', (req, res) => {
-    logs.push({type: 'asap', address: req.body.data.message});
+    orders.push({date: req.body.data.date, type: req.body.data.messageType, address: req.body.data.message});
     console.log('Received ASAP delivery request:');
     console.log('Address:', req.body.data.message);
     console.log('Order:', req.body.data.order);
+    console.log('Date:', req.body.data.date);
     res.sendStatus(200);
   });
   
   app.post('/hurry', (req, res) => {
-    logs.push({type: 'hurry', address: req.body.data.message});
+    orders.push({date: req.body.data.date, type: req.body.data.messageType, address: req.body.data.message});
     console.log('Received Hurry delivery request:');
     console.log('Address:', req.body.data.message);
     console.log('Order:', req.body.data.order);
+    console.log('Date:', req.body.data.date);
     res.sendStatus(200);
   });
 
   app.post('/hour', (req, res) => {
-    logs.push({type: 'hour', address: req.body.data.message});
+    orders.push({date: req.body.data.date, type: req.body.data.messageType, address: req.body.data.message});
     console.log('Received in 1 Hour delivery request:');
     console.log('Address:', req.body.data.message);
     console.log('Order:', req.body.data.order);

@@ -52,18 +52,25 @@ export class Cook extends React.Component {
 
     render() {
       return (
-        <div class="col-12 bd-content w-50">
+        <div className="col-12 bd-content w-50">
           <h1>Cook</h1>
-          <form onSubmit={this.handleSubmit}>
-          <div className="form-group">
-            <label>Select status</label>
-            <select className="custom-select custom-select-lg mb-3" name="messageType" onChange={this.handleInputChange} value={this.state.messageType}>
-              <option value="ready">ready</option>
-              <option value="outofstock">out of stock</option>
-            </select>
+          <div className="d-flex justify-content-center align-items-center">
+            <div className="col-6">
+              <h2>Food</h2>
+            </div>
+            <div className="col-6 d-flex justify-content-between">
+              <form onSubmit={this.handleSubmit}>
+              <div className="form-group">
+                <label>Select status</label>
+                <select className="custom-select custom-select-lg mb-3" name="messageType" onChange={this.handleInputChange} value={this.state.messageType}>
+                  <option value="ready">ready</option>
+                  <option value="outofstock">out of stock</option>
+                </select>
+              </div>
+              <button type="submit" className="btn btn-primary">Submit</button>
+              </form>
+            </div>
           </div>
-          <button type="submit" className="btn btn-primary">Submit</button>
-        </form>
       </div>
       );
     }
