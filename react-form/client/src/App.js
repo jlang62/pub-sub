@@ -10,18 +10,27 @@ import { Nav } from './Nav';
 import './App.css';
 
 
+
+
 export default function App() {
-  const [delivery, setDelivery] = useState(false);
+  const [screen, setScreen] = useState(0);
+
+  function changeView() {
+    const newScreen = (screen + 1) % 3;
+    setScreen(newScreen);
+  }
+  
 
   return (
     <div className="App">
       <Nav />
-      <button className="btn btn-primary" onClick={() => setDelivery(!delivery)}>change view</button>
+      <button className="btn btn-primary" onClick={() => changeView()}>change view</button>
       <div className="container-fluid">
         <div className="row">
           <div className="col-12 d-flex flex-column align-items-center justify-content-center">
-          
-            {delivery ? <MyComponent /> : <MessageForm />}
+            {
+              screen === 0 ? <MessageForm /> : screen === 1 ? <Delivery /> : <Cook />
+            }
           </div>
         </div>
       </div>
@@ -29,7 +38,7 @@ export default function App() {
   );
 }
 
-const MyComponent = () => {
+const Delivery = () => {
   const [logs, setLogs] = useState([]);
 
   useEffect(() => {
@@ -49,13 +58,21 @@ const MyComponent = () => {
 
   return (
     <div>
-      <h1>MyComponent</h1>
+      <h1>Delivery</h1>
       <button className="btn btn-primary" onClick={() => setLogs([])}>clear logs</button>
       {logs.map((log, index) => (
         <div key={index}>
           <p>{log.type}, {log.address}</p>
         </div>
       ))}
+    </div>
+  )
+}
+
+const Cook = () => {
+  return (
+    <div>
+      <h1>Cook</h1>
     </div>
   )
 }
