@@ -20,54 +20,35 @@ import sys
 app = flask.Flask(__name__)
 CORS(app)
 
-# für email:
-import smtplib
-from email.mime.text import MIMEText
 
-# SMTP-Konfiguration für den E-Mail-Versand
-SMTP_HOST = 'smtp-mail.outlook.com'
-SMTP_PORT = 587
-SMTP_USERNAME = 'uebungdapr@hotmail.com'
-SMTP_PASSWORD = 'Daprdapr1234'
-SENDER_EMAIL = 'sender@example.com'
-RECIPIENT_EMAIL = 'f.johanna@gmx.at'
-
-def sendEmail(subject, message):
-    msg = MIMEText(message)
-    msg['Subject'] = subject
-    msg['From'] = SENDER_EMAIL
-    msg['To'] = RECIPIENT_EMAIL
-
-    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
-        server.starttls()
-        server.login(SMTP_USERNAME, SMTP_PASSWORD)
-        server.send_message(msg)
-
+orders = []
 
 @app.route('/dapr/subscribe', methods=['GET'])
 def subscribe():
-    subscriptions = [{'pubsubname': 'pubsub', 'topic': 'asap', 'route': 'asap'}, {'pubsubname': 'pubsub', 'topic': 'hurry', 'route': 'hurry'}, {'pubsubname': 'pubsub', 'topic': 'mins', 'route': 'mins'}]
+    subscriptions = [{'pubsubname': 'pubsub', 'topic': 'asap', 'route': 'asap'}, {'pubsubname': 'pubsub', 'topic': 'hurry', 'route': 'hurry'}, {'pubsubname': 'pubsub', 'topic': 'hour', 'route': 'hour'}]
     return jsonify(subscriptions)
+
+@app.route('/cookorders', methods=['GET'])
+def cookorders_subscriber():
+    return jsonify(orders)
 
 @app.route('/asap', methods=['POST'])
 def asap_subscriber():
+    orders.append(request.json)
     print(f'asap: {request.json}', flush=True)
-    # E-Mail message:
-    message = request.json['data']['message']
-    topic = "Please pick up ____ at Mario's Pizza place" + request.json['topic']
-    sendEmail('Delivery needs to be picked up', f'Received message: "{message}" on topic: "{topic}"')
-    
     print('Received message I changed this "{}" on topic "{}"'.format(request.json['data']['message'], request.json['topic']), flush=True)
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
 
 @app.route('/hurry', methods=['POST'])
 def hurry_subscriber():
-    print(f'C: {request.json}', flush=True)
+    orders.append(request.json)
+    print(*orders)
     print('Received message I changed this "{}" on topic "{}"'.format(request.json['data']['message'], request.json['topic']), flush=True)
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
 
-@app.route('/mins', methods=['POST'])
-def mins_subscriber():
+@app.route('/hour', methods=['POST'])
+def hour_subscriber():
+    orders.append(request.json)
     print(f'C: {request.json}', flush=True)
     print('Received message I changed this "{}" on topic "{}"'.format(request.json['data']['message'], request.json['topic']), flush=True)
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
