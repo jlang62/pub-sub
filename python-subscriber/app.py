@@ -20,21 +20,40 @@ import sys
 app = flask.Flask(__name__)
 CORS(app)
 
+
+orders = []
+
 @app.route('/dapr/subscribe', methods=['GET'])
 def subscribe():
-    subscriptions = [{'pubsubname': 'pubsub', 'topic': 'asap', 'route': 'asap'}, {'pubsubname': 'pubsub', 'topic': 'C', 'route': 'C'}]
+    subscriptions = [{'pubsubname': 'pubsub', 'topic': 'asap', 'route': 'asap'}, {'pubsubname': 'pubsub', 'topic': 'hurry', 'route': 'hurry'}, {'pubsubname': 'pubsub', 'topic': 'hour', 'route': 'hour'}]
     return jsonify(subscriptions)
 
+@app.route('/cookorders', methods=['GET'])
+def cookorders_subscriber():
+    return jsonify(orders)
+
 @app.route('/asap', methods=['POST'])
-def a_subscriber():
+def asap_subscriber():
+    orders.append(request.json)
     print(f'asap: {request.json}', flush=True)
     print('Received message I changed this "{}" on topic "{}"'.format(request.json['data']['message'], request.json['topic']), flush=True)
-    return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+    return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
 
-@app.route('/C', methods=['POST'])
-def c_subscriber():
-    print(f'C: {request.json}', flush=True)
+@app.route('/hurry', methods=['POST'])
+def hurry_subscriber():
+    orders.append(request.json)
+    print(f'hurry: {request.json}', flush=True)
     print('Received message I changed this "{}" on topic "{}"'.format(request.json['data']['message'], request.json['topic']), flush=True)
-    return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+    return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
+
+@app.route('/hour', methods=['POST'])
+def hour_subscriber():
+    orders.append(request.json)
+    print(f'hour: {request.json}', flush=True)
+    print('Received message I changed this "{}" on topic "{}"'.format(request.json['data']['message'], request.json['topic']), flush=True)
+    return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
+
 
 app.run(port=5001)
+
+

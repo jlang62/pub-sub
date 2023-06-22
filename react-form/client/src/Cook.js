@@ -66,9 +66,9 @@ export class Cook extends React.Component {
     useEffect(() => {
       const fetchOrders = async () => {
         try {
-          const response = await fetch('http://localhost:3000/api/orders');
-          const orderData = await response.json();
-          setOrders(orderData.orders);
+          const response = await fetch('http://localhost:5001/cookorders');
+          const ordersData = await response.json();
+          setOrders(ordersData);
         } catch (error) {
           console.error('Error fetching orders:', error);
         }
@@ -93,9 +93,9 @@ export class Cook extends React.Component {
           <tbody>
             {orders.map((order, index) => (
               <tr key={index}>
-                <td>{order.date}</td>
-                <td>{order.type}</td>
-                <td>{order.order}</td>
+                <td>{order.data.date}</td>
+                <td>{order.data.messageType}</td>
+                <td>{order.data.order}</td>
                 <Status order={order}/>
               </tr>
             ))}
@@ -132,14 +132,13 @@ export class Cook extends React.Component {
             method:"POST",
             body: JSON.stringify(this.state),
         });
-        event.preventDefault();
         this.setState(this.getInitialState());
     }
 
     getInitialState = () => {
       return {
         messageType: "ready",
-        message: `ready for ${this.props.order.order}`
+        message: `ready for ${this.props.order.data.order}`
       };
     }
 
